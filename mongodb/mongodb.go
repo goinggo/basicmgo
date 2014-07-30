@@ -108,7 +108,7 @@ func Startup() error {
 func Shutdown() error {
 	log.Println("MongoDB : Shutdown : Started")
 
-	// Close the databases
+	// Close the sessions.
 	for _, session := range mm.sessions {
 		CloseSession(session.mongoSession)
 	}
