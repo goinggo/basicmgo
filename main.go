@@ -79,9 +79,12 @@ func RunQuery(query int) {
 	var buoyStations []BuoyStation
 	if err := mongodb.Execute(session, "goinggo", "buoy_stations",
 		func(collection *mgo.Collection) error {
-			return collection.Find(nil).All(&buoyStations)
+			queryMap := bson.M{"region": "Gulf Of Mexico"}
+
+			log.Printf("Query : db.buoy_stations.find(%s).limit(3)", mongodb.ToString(queryMap))
+			return collection.Find(queryMap).Limit(3).All(&buoyStations)
 		}); err != nil {
-		log.Println("Error Retrieve maxmind record", err)
+		log.Println("Runquery", err)
 		return
 	}
 
