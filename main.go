@@ -46,6 +46,8 @@ func main() {
 		return
 	}
 
+	defer mongodb.Shutdown()
+
 	// Perform 10 concurrent queries against the database.
 	waitGroup.Add(10)
 	for query := 0; query < 10; query++ {
