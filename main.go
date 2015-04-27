@@ -77,13 +77,14 @@ func RunQuery(query int) {
 	defer session.Close()
 
 	var buoyStations []BuoyStation
-	if err := mongodb.Execute(session, "goinggo", "buoy_stations",
-		func(collection *mgo.Collection) error {
-			queryMap := bson.M{"region": "Gulf Of Mexico"}
+	f := func(collection *mgo.Collection) error {
+		queryMap := bson.M{"region": "Gulf Of Mexico"}
 
-			log.Printf("Query : db.buoy_stations.find(%s).limit(3)", mongodb.ToString(queryMap))
-			return collection.Find(queryMap).Limit(3).All(&buoyStations)
-		}); err != nil {
+		log.Printf("Query : db.buoy_stations.find(%s).limit(3)", mongodb.ToString(queryMap))
+		return collection.Find(queryMap).Limit(3).All(&buoyStations)
+	}
+
+	if err := mongodb.Execute(session, "goinggo", "buoy_stations", f); err != nil {
 		log.Println("Runquery", err)
 		return
 	}

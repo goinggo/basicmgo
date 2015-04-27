@@ -53,10 +53,6 @@ type (
 	mongoManager struct {
 		sessions map[string]mongoSession
 	}
-
-	// DBCall defines a type of function that can be used
-	// to excecute code against MongoDB.
-	DBCall func(*mgo.Collection) error
 )
 
 // Startup brings the manager to a running state.
@@ -285,7 +281,7 @@ func ToStringD(queryMap bson.D) string {
 }
 
 // Execute the MongoDB literal function.
-func Execute(mongoSession *mgo.Session, databaseName string, collectionName string, dbCall DBCall) error {
+func Execute(mongoSession *mgo.Session, databaseName string, collectionName string, f func(*mgo.Collection) error) error {
 	log.Printf("MongoDB : Execute : Started : Database[%s] Collection[%s]\n", databaseName, collectionName)
 
 	// Capture the specified collection.
@@ -297,8 +293,7 @@ func Execute(mongoSession *mgo.Session, databaseName string, collectionName stri
 	}
 
 	// Execute the MongoDB call.
-	err := dbCall(collection)
-	if err != nil {
+	if err := f(collection); err != nil {
 		log.Println("MongoDB : Execute : ERROR :", err)
 		return err
 	}
