@@ -141,7 +141,7 @@ func CreateSession(mode string, sessionName string, hosts []string, databaseName
 		// Reads and writes will always be made to the master server using a
 		// unique connection so that reads and writes are fully consistent,
 		// ordered, and observing the most up-to-date data.
-		// http://godoc.org/github.com/finapps/mgo#Session.SetMode
+		// http://godoc.org/labix.org/v2/mgo#Session.SetMode
 		mongoSession.mongoSession.SetMode(mgo.Strong, true)
 		break
 
@@ -150,12 +150,12 @@ func CreateSession(mode string, sessionName string, hosts []string, databaseName
 		// history of changes moving forward, the data read will be consistent
 		// across sequential queries in the same session, and modifications made
 		// within the session will be observed in following queries (read-your-writes).
-		// http://godoc.org/github.com/finapps/mgo#Session.SetMode
+		// http://godoc.org/labix.org/v2/mgo#Session.SetMode
 		mongoSession.mongoSession.SetMode(mgo.Monotonic, true)
 	}
 
 	// Have the session check for errors.
-	// http://godoc.org/github.com/finapps/mgo#Session.SetSafe
+	// http://godoc.org/labix.org/v2/mgo#Session.SetSafe
 	mongoSession.mongoSession.SetSafe(&mgo.Safe{})
 
 	// Add the database to the map.
